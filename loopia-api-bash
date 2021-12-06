@@ -78,6 +78,16 @@ getZoneRecords () {
                                 <param><value><string>$1</string></value></param>\
                                 <param><value><string>$2</string></value></param>\
                         </params>\
-                </methodCall>" $api_loopia_url 
-                #| xmllint --xpath "//methodResponse/params/param/value/string/text()" -
+                </methodCall>" $api_loopia_url \
+		| xmllint --format --xpath "//methodResponse" - \
+		| grep -Po "(?<=<name>).*?(?=</value>)" \
+		| sed -e 's/<\/name><value>/\ /g' \
+			-e 's/<string>/\ /g' \
+			-e's/<int>/\ /g' \
+			-e 's/<\/string>/\ /g' \
+			-e 's/<\/int>/\ /g' \
+		| awk '{print $1" "$2}' \
+		| while read l1; read l2; read l3; read l4; read l5; do
+			echo -e "$l1\n$l2\n$l3\n$l4\n$l5" | sort -r
+		done
 }
