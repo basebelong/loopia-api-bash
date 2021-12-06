@@ -6,8 +6,8 @@ api_loopia_url="https://api.loopia.se/RPCSERV"
 
 ### addSubdomain ###
 #    args: domain subdomain
-#  output: "OK" || "Error: ... "
 # example: addSubdomain example.com www 
+#  output: "OK" || ""
 
 addSubdomain () {
         curl -s -H 'Content-Type: text/xml' -d \
@@ -16,16 +16,18 @@ addSubdomain () {
                         <param><value><string>$api_loopia_pass</string></value></param>\
                         <param><value><string>$1</string></value></param>\
                         <param><value><string>$2</string></value></param></params>\
-                </methodCall>" $api_loopia_url
+                </methodCall>" $api_loopia_url \
+                | xmllint --xpath "//methodResponse/params/param/value/string/text()" - 2>/dev/null
 }
 
 
-### addZoneRecordA ###
-#    args: subdomain domain type ttl rdata
-#  output: "OK" || "Error: ... "
-# example: addZoneRecord domain subdomain 3600 93.184.216.34
+### addZoneRecord ###
+#    args: domain subdomain type ttl rdata
+# example: addZoneRecord example.com www A 3600 93.184.216.34
+# example: addZoneRecord example.com www TXT 600 "this is an example string"
+#  output: "OK" || ""
 
-addZoneRecordA () {
+addZoneRecord () {
         curl -s -H 'Content-Type: text/xml' -d \
                 "<methodCall><methodName>addZoneRecord</methodName>\
                         <params>\
@@ -34,19 +36,21 @@ addZoneRecordA () {
                                 <param><value><string>$1</string></value></param>\
                                 <param><value><string>$2</string></value></param>\
                                 <param><value><struct>\
-                                        <member><name>type</name><value><string>A</string></value></member>\
-                                        <member><name>ttl</name><value><int>$3</int></value></member>\
-                                        <member><name>rdata</name><value><string>$4</string></value></member>\
+                                        <member><name>type</name><value><string>$3</string></value></member>\
+                                        <member><name>ttl</name><value><int>$4</int></value></member>\
+                                        <member><name>priority</name><value><int>50</int></value></member>\
+                                        <member><name>rdata</name><value><string>$5</string></value></member>\
                                 </struct></value></param>\
                         </params>\
-                </methodCall>" $api_loopia_url
+                </methodCall>" $api_loopia_url \
+                | xmllint --xpath "//methodResponse/params/param/value/string/text()" - 2>/dev/null
 }
 
 
 ### domainIsFree ###
 #    args: domain
-#  output: "OK" || "Error: ... "
 # example: domainIsFree example.com
+#  output: "OK" || "DOMAIN_OCCUPIED"
 
 domainIsFree () {
         curl -s -H 'Content-Type: text/xml' -d \
@@ -60,4 +64,20 @@ domainIsFree () {
                 | xmllint --xpath "//methodResponse/params/param/value/string/text()" -
 }
 
+### getZoneRecords ###
+#    args: domain subdomain
+# example: getZoneRecords
+#  output:
 
+getZoneRecords () {
+        curl -s -H 'Content-Type: text/xml' -d \
+                "<methodCall><methodName>getZoneRecords</methodName>\
+                        <params>\
+                                <param><value><string>$api_loopia_user</string></value></param>\
+                                <param><value><string>$api_loopia_pass</string></value></param>\
+                                <param><value><string>$1</string></value></param>\
+                                <param><value><string>$2</string></value></param>\
+                        </params>\
+                </methodCall>" $api_loopia_url 
+                #| xmllint --xpath "//methodResponse/params/param/value/string/text()" -
+}
