@@ -37,12 +37,14 @@ TODO: Actually implement core funtionality.
 
 ### addSubdomain ###
 Tested. Works.
+
 	   args: domain subdomain
 	example: addSubdomain example.com www 
 	 output: "OK" || ""
 
 ### addZoneRecord ###
 Unsafe. Works but gets "UNKNOWN_ERROR" on non-ascii.
+
 	   args: domain subdomain type ttl rdata
 	example: addZoneRecord example.com www A 3600 93.184.216.34
 	example: addZoneRecord example.com www TXT 600 "this is an example string"
@@ -50,12 +52,14 @@ Unsafe. Works but gets "UNKNOWN_ERROR" on non-ascii.
 
 ### domainIsFree ###
 Safe to use.
+
 	   args: domain
 	example: domainIsFree example.com
 	 output: "OK" || "DOMAIN_OCCUPIED"
 
 ### getZoneRecords ###
 Not done determining how output should be formated. CSV and SSV is out the door because of the nature on TXT records containing most anything.
+
 	   args: domain subdomain
 	example: getZoneRecords
 	 output:
