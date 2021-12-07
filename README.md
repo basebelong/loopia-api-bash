@@ -58,7 +58,7 @@ Safe to use.
 	 output: "OK" || "DOMAIN_OCCUPIED"
 
 ### getZoneRecords ###
-Not done determining how output should be formated. CSV and SSV is out the door because of the nature on TXT records containing most anything.
+Not done determining how output should be formated. CSV and SSV is out the door because of the nature on TXT records containing most anything. First word is a key and til end of line is value.
 
 	   args: domain subdomain
 	example: getZoneRecords
