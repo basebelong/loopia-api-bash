@@ -91,3 +91,22 @@ getZoneRecords () {
 			echo -e "$l1\n$l2\n$l3\n$l4\n$l5" | sort -r
 		done
 }
+
+### getCreditsAmount ###
+#    args: [0|1]
+# example: getZoneRecords 0
+#  output: double
+#    info: 0 for amount without VAT, 1 for amount including VAT (default if not given argument)
+
+getCreditsAmount () {
+	local vat="${1:-1}"
+        curl -s -H 'Content-Type: text/xml' -d \
+                "<methodCall><methodName>getCreditsAmount</methodName>\
+                        <params>\
+                                <param><value><string>$api_loopia_user</string></value></param>\
+                                <param><value><string>$api_loopia_pass</string></value></param>\
+                                <param><value><string>$vat</string></value></param>\
+                        </params>\
+                </methodCall>" $api_loopia_url \
+                | xmllint --xpath "//methodResponse/params/param/value/double/text()" -
+}

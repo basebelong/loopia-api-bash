@@ -64,3 +64,10 @@ Not done determining how output should be formated. CSV and SSV is out the door 
 	example: getZoneRecords
 	 output:
 
+### getCreditsAmount ###
+0 for amount without VAT, 1 for amount including VAT (default if not given argument)
+
+	   args: [0|1]
+	example: getZoneRecords 0
+	 output: double
+
