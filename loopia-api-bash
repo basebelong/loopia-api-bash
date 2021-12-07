@@ -70,7 +70,7 @@ domainIsFree () {
 #  output:
 
 getZoneRecords () {
-        curl -s -H 'Content-Type: text/xml' -d \
+        curl -s -H 'Content-Type: text/xml' -H 'Charset: utf-8' -d \
                 "<methodCall><methodName>getZoneRecords</methodName>\
                         <params>\
                                 <param><value><string>$api_loopia_user</string></value></param>\
@@ -86,7 +86,6 @@ getZoneRecords () {
 			-e's/<int>/\ /g' \
 			-e 's/<\/string>/\ /g' \
 			-e 's/<\/int>/\ /g' \
-		| awk '{print $1" "$2}' \
 		| while read l1; read l2; read l3; read l4; read l5; do
 			echo -e "$l1\n$l2\n$l3\n$l4\n$l5" | sort -r
 		done
