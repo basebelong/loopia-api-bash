@@ -82,3 +82,30 @@ Safe to use.
 	   args: domain
 	example: getDomain example.com
 	 output: 
+
+### getDomains ###
+[loopia docs](https://www.loopia.com/api/getdomains/)
+Safe to use.
+
+	   args:
+	example: getDomain
+	 output: 
+
+### getInvoice ###
+[loopia docs](https://www.loopia.com/api/getinvoice/)
+Unsafe. Untested!
+
+	   args: reference_no
+	example: getInvoice 123123123 0
+	 output:
+
+### getUnpaidInvoices ###
+[loopia docs](https://www.loopia.com/api/getunpaidinvoices/)
+Unsafe. Untested!
+Not working. Server responds with "no matching signature for argument list [string string string]"
+Same error if $vat is int. Does not accept a bool tag.
+
+	   args:
+	example: getUnpaidInvoices
+	 output:
+

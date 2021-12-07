@@ -137,3 +137,86 @@ getDomain () {
 			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6" | sort -r
 		done
 }
+
+### getDomains ###
+#    args:
+# example: getDomains
+#  output:
+
+getDomains () {
+        curl -s -H 'Content-Type: text/xml' -H 'Charset: utf-8' -d \
+                "<methodCall><methodName>getDomains</methodName>\
+                        <params>\
+                                <param><value><string>$api_loopia_user</string></value></param>\
+                                <param><value><string>$api_loopia_pass</string></value></param>\
+                        </params>\
+                </methodCall>" $api_loopia_url \
+		| xmllint --format --xpath "//methodResponse" - \
+		| grep -Po "(?<=<name>).*?(?=</value>)" \
+		| sed -e 's/<\/name><value>/\ /g' \
+			-e 's/<string>/\ /g' \
+			-e's/<int>/\ /g' \
+			-e 's/<\/string>/\ /g' \
+			-e 's/<\/int>/\ /g' \
+		| while read l1; read l2; read l3; read l4; read l5; read l6; do
+			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6" | sort
+		done
+}
+
+### getInvoice ###
+#    args: reference_no
+# example: getInvoice 123123123 0
+#  output:
+# Unsafe. Untested!
+
+getInvoice () {
+	local vat="${1:-1}"
+        curl -s -H 'Content-Type: text/xml' -H 'Charset: utf-8' -d \
+                "<methodCall><methodName>getInvoice</methodName>\
+                        <params>\
+                                <param><value><string>$api_loopia_user</string></value></param>\
+                                <param><value><string>$api_loopia_pass</string></value></param>\
+                                <param><value><string>$1</string></value></param>\
+                                <param><value><string>$vat</string></value></param>\
+                        </params>\
+                </methodCall>" $api_loopia_url \
+		| xmllint --format --xpath "//methodResponse" - 
+#		| grep -Po "(?<=<name>).*?(?=</value>)" \
+#		| sed -e 's/<\/name><value>/\ /g' \
+#			-e 's/<string>/\ /g' \
+#			-e's/<int>/\ /g' \
+#			-e 's/<\/string>/\ /g' \
+#			-e 's/<\/int>/\ /g' \
+#		| while read l1; read l2; read l3; read l4; read l5; read l6; read l7; read l8; do
+#			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6\n$l7\n$l8" | sort
+#		done
+}
+
+### getUnpaidInvoices ###
+#    args:
+# example: getUnpaidInvoices
+#  output:
+# Not working. Server responds with "no matching signature for argument list [string string string]"
+# Same error if $vat is int. Does not accept a bool tag.
+
+getUnpaidInvoices () {
+	local vat="${1:-1}"
+        curl -s -H 'Content-Type: text/xml' -H 'Charset: utf-8' -d \
+                "<methodCall><methodName>getUnpaidInvoices</methodName>\
+                        <params>\
+                                <param><value><string>$api_loopia_user</string></value></param>\
+                                <param><value><string>$api_loopia_pass</string></value></param>\
+                                <param><value><string>$vat</string></value></param>\
+                        </params>\
+                </methodCall>" $api_loopia_url 
+#		| xmllint --format --xpath "//methodResponse" - \
+#		| grep -Po "(?<=<name>).*?(?=</value>)" \
+#		| sed -e 's/<\/name><value>/\ /g' \
+#			-e 's/<string>/\ /g' \
+#			-e's/<int>/\ /g' \
+#			-e 's/<\/string>/\ /g' \
+#			-e 's/<\/int>/\ /g' \
+#		| while read l1; read l2; read l3; read l4; read l5; read l6; do
+#			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6" | sort
+#		done
+}
