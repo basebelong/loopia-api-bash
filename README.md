@@ -71,3 +71,9 @@ Not done determining how output should be formated. CSV and SSV is out the door 
 	example: getZoneRecords 0
 	 output: double
 
+### getDomain ###
+Safe to use.
+
+	   args: domain
+	example: getDomain example.com
+	 output: 
