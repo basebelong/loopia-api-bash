@@ -109,3 +109,11 @@ Have no idea how it would handle severla unpaid invoives. Works fine when there 
 	example: getUnpaidInvoices
 	 output:
 
+### payInvoiceUsingCredits ###
+[loopia docs](https://www.loopia.com/api/payinvoiceusingcredits/)
+Unsafe. Untested.
+
+	   args: invoice_no
+	example: payInvoiceUsingCredits invoice_no
+	 output: OK || INSUFFICIENT_FUNDS || UNKNOWN_ERROR
+
