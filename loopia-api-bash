@@ -167,7 +167,8 @@ getDomains () {
 #    args: reference_no
 # example: getInvoice 123123123 0
 #  output:
-# Unsafe. Untested!
+# Safe to use.
+# Get invoice number with getUnpaidInvoices.
 
 getInvoice () {
 	local vat="${1:-1}"
@@ -177,27 +178,47 @@ getInvoice () {
                                 <param><value><string>$api_loopia_user</string></value></param>\
                                 <param><value><string>$api_loopia_pass</string></value></param>\
                                 <param><value><string>$1</string></value></param>\
-                                <param><value><string>$vat</string></value></param>\
+                                <param><value><boolean>$vat</boolean></value></param>\
                         </params>\
                 </methodCall>" $api_loopia_url \
-		| xmllint --format --xpath "//methodResponse" - 
-#		| grep -Po "(?<=<name>).*?(?=</value>)" \
-#		| sed -e 's/<\/name><value>/\ /g' \
-#			-e 's/<string>/\ /g' \
-#			-e's/<int>/\ /g' \
-#			-e 's/<\/string>/\ /g' \
-#			-e 's/<\/int>/\ /g' \
-#		| while read l1; read l2; read l3; read l4; read l5; read l6; read l7; read l8; do
-#			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6\n$l7\n$l8" | sort
-#		done
+		| xmllint --format --xpath "//methodResponse" - \
+		| grep -Po "(?<=<name>).*?(?=</value>)" \
+		| sed \
+			-e 's/<name>/\ /g' \
+			-e 's/<array>/\ /g' \
+			-e 's/<struct>/\ /g' \
+			-e 's/<data>/\ /g' \
+			-e 's/<member>/\ /g' \
+			-e 's/<value>/\ /g' \
+			-e 's/<items>/\ /g' \
+			-e 's/<string>/\ /g' \
+			-e 's/<double>/\ /g' \
+			-e 's/<int>/\ /g' \
+			-e 's/<boolean>/\ /g' \
+			-e 's/<\/name>/\ /g' \
+			-e 's/<\/array>/\ /g' \
+			-e 's/<\/struct>/\ /g' \
+			-e 's/<\/data>/\ /g' \
+			-e 's/<\/member>/\ /g' \
+			-e 's/<\/value>/\ /g' \
+			-e 's/<\/items>/\ /g' \
+			-e 's/<\/string>/\ /g' \
+			-e 's/<\/double>/\ /g' \
+			-e 's/<\/int>/\ /g' \
+			-e 's/<\/boolean>/\ /g' \
+			| grep -v 'items' \
+			| grep -v 'vat' \
+		| while read l1; read l2; read l3; read l4; read l5; read l6; read l7; read l8; read l9; read l10; do
+			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6\n$l7\n$l8\n$l9\n$l10" | sort
+		done
 }
 
 ### getUnpaidInvoices ###
 #    args:
 # example: getUnpaidInvoices
 #  output:
-# Not working. Server responds with "no matching signature for argument list [string string string]"
-# Same error if $vat is int. Does not accept a bool tag.
+# Unsafe.
+# Have no idea how it would handle severla unpaid invoives. Works fine when there is only one single.
 
 getUnpaidInvoices () {
 	local vat="${1:-1}"
@@ -206,17 +227,35 @@ getUnpaidInvoices () {
                         <params>\
                                 <param><value><string>$api_loopia_user</string></value></param>\
                                 <param><value><string>$api_loopia_pass</string></value></param>\
-                                <param><value><string>$vat</string></value></param>\
+                                <param><value><boolean>$vat</boolean></value></param>\
                         </params>\
-                </methodCall>" $api_loopia_url 
-#		| xmllint --format --xpath "//methodResponse" - \
-#		| grep -Po "(?<=<name>).*?(?=</value>)" \
-#		| sed -e 's/<\/name><value>/\ /g' \
-#			-e 's/<string>/\ /g' \
-#			-e's/<int>/\ /g' \
-#			-e 's/<\/string>/\ /g' \
-#			-e 's/<\/int>/\ /g' \
-#		| while read l1; read l2; read l3; read l4; read l5; read l6; do
-#			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6" | sort
-#		done
+                </methodCall>" $api_loopia_url \
+		| xmllint --format --xpath "//methodResponse" - \
+		| grep -Po "(?<=<name>).*?(?=</value>)" \
+		| sed \
+			-e 's/<name>/\ /g' \
+			-e 's/<array>/\ /g' \
+			-e 's/<struct>/\ /g' \
+			-e 's/<data>/\ /g' \
+			-e 's/<member>/\ /g' \
+			-e 's/<value>/\ /g' \
+			-e 's/<items>/\ /g' \
+			-e 's/<string>/\ /g' \
+			-e 's/<double>/\ /g' \
+			-e 's/<int>/\ /g' \
+			-e 's/<boolean>/\ /g' \
+			-e 's/<\/name>/\ /g' \
+			-e 's/<\/array>/\ /g' \
+			-e 's/<\/struct>/\ /g' \
+			-e 's/<\/data>/\ /g' \
+			-e 's/<\/member>/\ /g' \
+			-e 's/<\/value>/\ /g' \
+			-e 's/<\/items>/\ /g' \
+			-e 's/<\/string>/\ /g' \
+			-e 's/<\/double>/\ /g' \
+			-e 's/<\/int>/\ /g' \
+			-e 's/<\/boolean>/\ /g' \
+		| while read l1; read l2; read l3; read l4; read l5; read l6; do
+			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6" | sort
+		done
 }

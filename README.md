@@ -93,7 +93,8 @@ Safe to use.
 
 ### getInvoice ###
 [loopia docs](https://www.loopia.com/api/getinvoice/)
-Unsafe. Untested!
+Safe to use.
+Get invoice number with getUnpaidInvoices.
 
 	   args: reference_no
 	example: getInvoice 123123123 0
@@ -101,9 +102,8 @@ Unsafe. Untested!
 
 ### getUnpaidInvoices ###
 [loopia docs](https://www.loopia.com/api/getunpaidinvoices/)
-Unsafe. Untested!
-Not working. Server responds with "no matching signature for argument list [string string string]"
-Same error if $vat is int. Does not accept a bool tag.
+Unsafe.
+Have no idea how it would handle severla unpaid invoives. Works fine when there is only one single.
 
 	   args:
 	example: getUnpaidInvoices
