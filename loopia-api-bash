@@ -267,11 +267,39 @@ getUnpaidInvoices () {
 
 payInvoiceUsingCredits () {
         curl -s -H 'Content-Type: text/xml' -H 'Charset: utf-8' -d \
-                "<methodCall><methodName>getDomains</methodName>\
+                "<methodCall><methodName>payInvoiceUsingCredist</methodName>\
                         <params>\
                                 <param><value><string>$api_loopia_user</string></value></param>\
                                 <param><value><string>$api_loopia_pass</string></value></param>\
                                 <param><value><string>$1</string></value></param>\
+                        </params>\
+                </methodCall>" $api_loopia_url \
+		| xmllint --format --xpath "//methodResponse" - \
+		| grep -Po "(?<=<name>).*?(?=</value>)" \
+		| sed -e 's/<\/name><value>/\ /g' \
+			-e 's/<string>/\ /g' \
+			-e's/<int>/\ /g' \
+			-e 's/<\/string>/\ /g' \
+			-e 's/<\/int>/\ /g' \
+		| while read l1; read l2; read l3; read l4; read l5; read l6; do
+			echo -e "$l1\n$l2\n$l3\n$l4\n$l5\n$l6" | sort
+		done
+}
+
+### removeZoneRecord ###
+#    args: domain subdomain recprd_id
+# example: removeZoneRecord example.com www 123123123
+#  output: "OK" || "UNKNOWN_ERROR"
+
+removeZoneRecord () {
+        curl -s -H 'Content-Type: text/xml' -H 'Charset: utf-8' -d \
+                "<methodCall><methodName>removeZoneRecord</methodName>\
+                        <params>\
+                                <param><value><string>$api_loopia_user</string></value></param>\
+                                <param><value><string>$api_loopia_pass</string></value></param>\
+                                <param><value><string>$1</string></value></param>\
+                                <param><value><string>$2</string></value></param>\
+                                <param><value><int>$3</int></value></param>\
                         </params>\
                 </methodCall>" $api_loopia_url \
 		| xmllint --format --xpath "//methodResponse" - \

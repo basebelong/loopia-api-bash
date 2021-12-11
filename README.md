@@ -117,3 +117,10 @@ Unsafe. Untested.
 	example: payInvoiceUsingCredits invoice_no
 	 output: OK || INSUFFICIENT_FUNDS || UNKNOWN_ERROR
 
+### removeZoneRecord ###
+[loopia docs](https://www.loopia.com/api/removezonerecord/)
+
+	   args: domain subdomain recprd_id
+	example: removeZoneRecord example.com www 123123123
+	 output: "OK" || "UNKNOWN_ERROR"
+
